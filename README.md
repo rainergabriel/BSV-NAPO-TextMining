@@ -30,6 +30,7 @@ BSV-NAPO-TextMining/
 ├── output/
 │   ├── heatmap_kantone_begriffe.pdf   ← Ergebnis
 │   └── heatmap_kantone_begriffe.png   ← Ergebnis
+├── suchbegriffe.csv               ← Suchbegriffe-Tabelle (editierbar)
 ├── analyse_kantone_heatmap.R
 └── README.md
 ```
@@ -42,26 +43,25 @@ Rscript analyse_kantone_heatmap.R
 
 ## Was das Skript tut
 
-1. Liest `data/corpus_kantone.jsonl` (Volltext pro Kanton, eine Zeile pro Dokument)
-2. Durchsucht jeden Text nach 5 Schlüsselbegriffen (case-insensitive Substring-Match, dreisprachig DE/FR/IT):
-   - **Nichtbezug / Non-recours** — Nichtbezug von Sozialleistungen
-   - **Armut / Pauvreté** — Armut, Armutsrisiko
-   - **Prekarität / Précarité** — prekäre Lebenssituationen
-   - **Erwerbsarbeit / Activité prof.** — Erwerbstätigkeit im Alter
-   - **Betreuung / Accompagnement** — Betreuungsleistungen
-3. Erzeugt eine binäre Heatmap (Kanton × Begriff, ja/nein) als PDF und PNG
+1. Liest `suchbegriffe.csv` — die dreisprachige Suchbegriffe-Tabelle, gegliedert nach 4 Clustern und 18 Themen
+2. Liest `data/corpus_kantone.jsonl` (Volltext pro Kanton, eine Zeile pro Dokument)
+3. Durchsucht jeden Text nach den Suchbegriffen (case-insensitive Substring-Match, DE/FR/IT)
+4. Erzeugt pro Cluster eine binäre Heatmap (Kanton × Thema, ja/nein) als PDF und PNG
 
-## Suchbegriffe erweitern
+### Cluster
 
-Im Skript `analyse_kantone_heatmap.R` das `suchbegriffe`-List-Objekt ergänzen:
+| Cluster | Bezeichnung | Themen |
+|---------|------------|--------|
+| C1 | Gesundheit und Autonomie | 4 |
+| C2 | Teilhabe | 4 |
+| C3 | Materielle Sicherheit | 5 |
+| C4 | Schutz und Rechte | 5 |
 
-```r
-suchbegriffe[["Neuer Begriff / Nouveau terme"]] <- c(
-  "deutsch_variante1", "deutsch_variante2",
-  "francais_variante1",
-  "italiano_variante1"
-)
-```
+## Suchbegriffe anpassen
+
+Die Suchbegriffe werden in `suchbegriffe.csv` definiert (Semikolon-getrennte Varianten pro Sprache). Die Datei kann in Excel oder einem Texteditor bearbeitet werden.
+
+Spalten: `cluster`, `cluster_label`, `topic`, `topic_label`, `term_de`, `term_fr`, `term_it`
 
 ## Verwandte Repositories
 
